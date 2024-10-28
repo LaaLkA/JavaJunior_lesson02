@@ -55,7 +55,7 @@ public class QueryBuilder {
             if (field.isAnnotationPresent(Column.class)) {
                 Column columnAnnotation = field.getAnnotation(Column.class);
                 if (columnAnnotation.primaryKey()) {
-                    query.append(columnAnnotation.name()).append(" ").append(primaryKey);
+                    query.append(columnAnnotation.name()).append(" = '").append(primaryKey).append("'");
                     break;
                 }
             }
@@ -102,6 +102,20 @@ public class QueryBuilder {
     }
 
     public String buildDeleteQuery(Class<?> clazz, UUID primaryKey) throws IllegalAccessException {
-        return null;
+        StringBuilder query = new StringBuilder("DELETE FROM ");
+        if (clazz.isAnnotationPresent(Table.class)) {
+            query.append(clazz.getAnnotation(Table.class).name()).append(" WHERE ");
+        }
+
+        Field[] fields = clazz.getDeclaredFields();
+        for (Field field : fields) {
+            if (field.isAnnotationPresent(Column.class)) {
+                Column columnAnnotation = field.getAnnotation(Column.class);
+                if (columnAnnotation.primaryKey()) {
+                    query.append(columnAnnotation.name()).append(" = '").append(primaryKey).append("'");
+                }
+            }
+        }
+        return query.toString();
     }
 }

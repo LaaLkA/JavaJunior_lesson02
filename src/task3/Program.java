@@ -41,5 +41,9 @@ public class Program {
 
         String updateQuery = queryBuilder.buildUpdateQuery(user);
         System.out.printf("Update Query: %s\n", updateQuery);
+
+        // ДЗ
+        String deleteQuery = queryBuilder.buildDeleteQuery(Employee.class, pk);
+        System.out.printf("Delete Query: %s\n", deleteQuery);
     }
 }
